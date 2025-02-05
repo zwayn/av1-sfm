@@ -14,6 +14,7 @@
 import pytest
 
 from ..modules.io import check_ivf_file
+from ..modules.io import get_image_paths
 from .config.io_test_config import IoTestConfig
 
 
@@ -23,4 +24,14 @@ from .config.io_test_config import IoTestConfig
 )
 def test_ivf_file(input_path, expected_result):
     result = check_ivf_file(input_path)
+    assert result == expected_result
+
+
+@pytest.mark.parametrize(
+    "input_path, expected_result",
+    IoTestConfig.get_image_paths
+)
+def test_get_image_paths(input_path, expected_result):
+    result = get_image_paths(input_path)
+
     assert result == expected_result
