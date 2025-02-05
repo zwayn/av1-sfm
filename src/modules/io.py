@@ -27,3 +27,30 @@ def check_ivf_file(file_path: str) -> bool:
         if signature != IVF_SIGNATURE or codec != CODEC:
             return False
         return True
+
+
+def get_image_paths(folder_path: str) -> list[str]:
+    """ Get the paths of all the images in the folder.
+
+    The input of the process can be a folder full of images that we will have to
+    encode.
+
+    Args:
+        folder_path (str): The path to the folder containing the images.
+
+    Returns:
+        list[str]: A list of paths to the images.
+    """
+
+    image_paths = []
+    extensions = [".jpg", ".jpeg", ".png", ".bmp", ".tiff", ".tif", "webp", ".npy"]
+    for directory_path, _, filenames in os.walk(folder_path):
+        file_paths = [
+            file for file in filenames if any(file.lower().endswith(extension) for extension in extensions)
+        ]
+
+        for filename in file_paths:
+            image_paths.append(os.path.join(directory_path, filename))
+    image_paths.sort()
+
+    return image_paths
