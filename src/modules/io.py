@@ -12,7 +12,7 @@
 
 
 import os
-
+import shutil
 IVF_SIGNATURE = b"DKIF"
 IVF_HEADER_SIZE = 32
 CODEC = b"AV01"
@@ -27,6 +27,25 @@ def check_ivf_file(file_path: str) -> bool:
         if signature != IVF_SIGNATURE or codec != CODEC:
             return False
         return True
+
+
+def copy_images(image_paths: list[str], output_folder: str):
+    """ Copy the images to the output folder.
+
+    The images copied name is being normalized to be in the right format.
+
+    Args:
+        image_paths (list[str]): The paths to the images.
+        output_folder (str): The path to the output folder.
+    """
+
+    for idx, image_path in enumerate(image_paths):
+        # Get the extension of the image.
+        image_path_extension = image_path.split(".")[-1]
+        
+        new_filename = f"frame_{idx:04d}.{image_path_extension}"
+        dest_path = os.path.join(output_folder, new_filename)
+        shutil.copy2(image_path, dest_path)
 
 
 def get_image_paths(folder_path: str) -> list[str]:
