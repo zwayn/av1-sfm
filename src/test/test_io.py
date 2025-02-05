@@ -10,10 +10,12 @@
  # @ Description: Test the io module.
  '''
 
-
+import os
+import shutil
 import pytest
 
 from ..modules.io import check_ivf_file
+from ..modules.io import copy_images
 from ..modules.io import get_image_paths
 from .config.io_test_config import IoTestConfig
 
@@ -25,6 +27,28 @@ from .config.io_test_config import IoTestConfig
 def test_ivf_file(input_path, expected_result):
     result = check_ivf_file(input_path)
     assert result == expected_result
+
+
+@pytest.mark.parametrize(
+    "input_path, expected_result",
+    IoTestConfig.copy_images
+)
+def test_copy_images(input_path, expected_result):
+
+    # Create a temporary folder.
+    os.makedirs("src/test/data/images/test_dir", exist_ok=True)
+
+    image_paths = get_image_paths(input_path)
+
+    copy_images(image_paths, "src/test/data/images/test_dir")
+
+    # Get the paths of the images in the temporary folder.
+    image_paths = get_image_paths("src/test/data/images/test_dir")
+
+    assert image_paths == expected_result
+
+    # Remove the temporary folder.
+    shutil.rmtree("src/test/data/images/test_dir")
 
 
 @pytest.mark.parametrize(
