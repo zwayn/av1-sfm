@@ -18,7 +18,7 @@ from loguru import logger
 
 
 def start_logger(
-    file_name: str = datetime.datetime.now(),
+    file_name: str = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S"),
     path: str = None,
     level: str = "INFO"
 ):
