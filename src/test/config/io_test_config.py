@@ -1,5 +1,5 @@
 '''
- # @ : ivf_test_config.py
+ # @ : io_test_config.py
  # @ Created by: Julien Zouein
  # @ Create Time: 2025-02-05
  # @ Copyright: © 2024 Sigmedia.tv. All rights reserved.
@@ -7,18 +7,12 @@
  # @ Modified by: Julien Zouein
  # @ Modified time: 2025-02-05
  # @  :----------------------------------------------------------------------------:
- # @ Description: Configuration for the IVF test.
+ # @ Description: Config for the io test.
  '''
 
-class IvfTestConfig(object):
-    
+
+class IoTestConfig:
     check_ivf_file = [
-        (
-            "src/test/data/test_subdataset.ivf",
-            True
-        ),
-        (
-            "src/test/data/000046.avi",
-            False
-        )
+        ("src/test/data/test_subdataset.ivf", True),
+        ("src/test/data/000046.avi", False),
     ]
