@@ -39,12 +39,14 @@ def copy_images(image_paths: list[str], output_folder: str):
         output_folder (str): The path to the output folder.
     """
 
+    os.makedirs(f"{output_folder}/images", exist_ok=True)
+
     for idx, image_path in enumerate(image_paths):
         # Get the extension of the image.
         image_path_extension = image_path.split(".")[-1]
         
         new_filename = f"frame_{idx:04d}.{image_path_extension}"
-        dest_path = os.path.join(output_folder, new_filename)
+        dest_path = os.path.join(output_folder, "images", new_filename)
         shutil.copy2(image_path, dest_path)
 
 
