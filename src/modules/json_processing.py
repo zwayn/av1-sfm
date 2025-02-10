@@ -66,7 +66,7 @@ def get_block_map(frame_metadata: dict, temp_folder: str) -> np.ndarray:
     coord_block = []
     frame_number = frame_metadata["frame"]
     
-    result = np.zeros((4*height, 4*width), dtype=np.int8)
+    result = np.zeros((4*height, 4*width), dtype=int)
 
     block_index = 1
 
@@ -79,7 +79,7 @@ def get_block_map(frame_metadata: dict, temp_folder: str) -> np.ndarray:
 
             if result[i*4, j*4] == 0:
 
-                block_identifier = block_size_data[i*4, j*4]
+                block_identifier = block_size_data[i, j]
 
                 block_width, block_height = block_size[block_identifier]
 
@@ -91,8 +91,10 @@ def get_block_map(frame_metadata: dict, temp_folder: str) -> np.ndarray:
 
                 minimal_block_size = min(block_width, block_height)
 
-                x_patch = block_center_x - minimal_block_size//2
-                y_patch = block_center_y - minimal_block_size//2
+                x_patch = int(block_center_x - minimal_block_size//2)
+                y_patch = int(block_center_y - minimal_block_size//2)
+
+                coord_block.append([block_center_x, block_center_y])
 
                 block_patch = image[y_patch:y_patch+minimal_block_size, x_patch:x_patch+minimal_block_size]
 
@@ -103,7 +105,7 @@ def get_block_map(frame_metadata: dict, temp_folder: str) -> np.ndarray:
 
     result = result - 1
 
-    return result
+    return result, coord_block
 
 def get_frame_ref_index(temp_folder: str) -> list[list[int]]:
     """ This function is used to get the order hints out of AV1 bitstream.
@@ -199,6 +201,8 @@ def _compute_angle(block_patch: np.array, size: int) -> float:
 
     weighting = _gaussian2d([size, size], 2)
     weighting = np.diag(weighting.ravel())
+
+    block_patch = block_patch.astype(np.float32)
 
     block_patch = cv2.resize(block_patch, (size, size))
 
