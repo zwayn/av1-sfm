@@ -81,3 +81,14 @@ class JsonProcessingTestConfig(object):
             135
         ),
     ]
+
+    get_block_map = [
+        (
+            [[0,6,6,6,6,],[0,6,6,6,6],[0,6,6,6,6],[0,6,6,6,6],[3,3,0,3,3],[3,3,0,3,3]],
+            "src/test/data/get_block_map/",
+            0,
+            "src/test/data/get_block_map/frame_0_ref.feat",
+            "src/test/data/get_block_map/block_map_0_ref.npy",
+            [[1.5, 1.5], [11.5, 7.5], [1.5, 5.5], [1.5, 9.5], [1.5, 13.5], [3.5, 19.5], [9.5, 17.5], [15.5, 19.5], [9.5, 21.5]]
+        )
+    ]
