@@ -15,8 +15,7 @@ class JsonProcessingTestConfig(object):
 
     get_frame_ref_index = [
         (
-            "src/test/data/test_subdataset.ivf",
-            "src/test/output/",
+            "src/test/data/",
             [
                 '0, 0, 0, 0, 0, 0, 0, 0', 
                 '0, 0, 0, 0, 0, 0, 0, 0', 
@@ -30,4 +29,55 @@ class JsonProcessingTestConfig(object):
                 '0, 7, 6, 5, 8, 0, 4, 3'
             ]
         )
+    ]
+
+    _compute_angle = [
+        (
+            "src/test/data/images/orientation/0_5.png",
+            0
+        ),
+        (
+            "src/test/data/images/orientation/45_5.png",
+            45
+        ),
+        (
+            "src/test/data/images/orientation/90_5.png",
+            90
+        ),
+        (
+            "src/test/data/images/orientation/135_5.png",
+            135
+        ),
+        (
+            "src/test/data/images/orientation/0_9.png",
+            0
+        ),
+        (
+            "src/test/data/images/orientation/45_9.png",
+            45
+        ),
+        (
+            "src/test/data/images/orientation/90_9.png",
+            90
+        ),
+        (
+            "src/test/data/images/orientation/135_9.png",
+            135
+        ),
+        (
+            "src/test/data/images/orientation/0_12.png",
+            0
+        ),
+        (
+            "src/test/data/images/orientation/45_12.png",
+            45
+        ),
+        (
+            "src/test/data/images/orientation/90_12.png",
+            90
+        ),
+        (
+            "src/test/data/images/orientation/135_12.png",
+            135
+        ),
     ]
