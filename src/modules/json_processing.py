@@ -86,8 +86,8 @@ def get_block_map(frame_metadata: dict, temp_folder: str) -> np.ndarray:
                 result[i*4:i*4+block_height, j*4:j*4+block_width] = block_index
                 block_index += 1
 
-                block_center_x = (j*4 + block_width) / 2
-                block_center_y = (i*4 + block_height) / 2
+                block_center_x = (j*4) + ((block_width-1) / 2)
+                block_center_y = (i*4) + ((block_height-1) / 2)
 
                 minimal_block_size = min(block_width, block_height)
 
@@ -101,7 +101,7 @@ def get_block_map(frame_metadata: dict, temp_folder: str) -> np.ndarray:
                 angle = _compute_angle(block_patch, minimal_block_size)
 
                 with open(f"{temp_folder}/frame_{frame_number}.feat", mode="a", encoding="utf-8") as feat_file:
-                    feat_file.write(f"{block_center_x} {block_center_y} {minimal_block_size} angle\n")
+                    feat_file.write(f"{block_center_x} {block_center_y} {minimal_block_size} {angle}\n")
 
     result = result - 1
 
