@@ -19,6 +19,8 @@ import pytest
 from ..modules.json_processing import _compute_angle
 from ..modules.json_processing import get_block_map
 from ..modules.json_processing import get_frame_ref_index
+from ..modules.json_processing import get_motion_vectors
+from ..modules.json_processing import get_reference_frame
 
 from .config.json_processing_test_config import JsonProcessingTestConfig
 
@@ -29,6 +31,28 @@ from .config.json_processing_test_config import JsonProcessingTestConfig
 )
 def test_get_frame_ref_index(input_path, expected_output):
     assert get_frame_ref_index(input_path) == expected_output
+
+
+@pytest.mark.parametrize(
+    "input, expected_output",
+    JsonProcessingTestConfig.get_motion_vectors
+)
+def test_get_motion_vectors(input, expected_output):
+    input = np.array(input)
+    expected_output = np.array(expected_output)
+    frame_data = {"motionVectors": input}
+    assert np.array_equal(get_motion_vectors(frame_data), expected_output)
+
+
+@pytest.mark.parametrize(
+    "input, order_hint, expected_output",
+    JsonProcessingTestConfig.get_reference_frame
+)
+def test_get_reference_frame(input, order_hint, expected_output):
+    input = np.array(input)
+    expected_output = np.array(expected_output)
+    frame_data = {"referenceFrame": input}
+    assert np.array_equal(get_reference_frame(frame_data, order_hint), expected_output)
 
 
 @pytest.mark.parametrize(
