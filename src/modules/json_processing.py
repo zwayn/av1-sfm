@@ -156,6 +156,8 @@ def get_motion_vectors(frame_metadata: dict) -> np.ndarray:
     # AV1 has 1/* pixel precision. Therefore motion vectors are divided by 8.
     motion_vectors = np.array(frame_metadata["motionVectors"]) / 8
 
+    motion_vectors = _inverse_motion(motion_vectors)
+
     # the array is 1/16 of the size of the frame. we upsample it by giving the same value to all the new pixels.
     height, width, _ = motion_vectors.shape
     motion_vectors = cv2.resize(motion_vectors, (width * 4, height * 4), interpolation=cv2.INTER_NEAREST)
@@ -176,8 +178,9 @@ def get_reference_frame(frame_metadata: dict, order_hint: list[int]) -> np.ndarr
 
     reference_frame = np.array(frame_metadata["referenceFrame"])
 
-    f = lambda x: order_hint[x]
-    reference_frame_index = np.vectorize(f)(reference_frame)
+    mapping = np.array(order_hint)
+    # Use the references as indices into the mapping array
+    reference_frame_index =  mapping[reference_frame]
 
     height, width, _ = reference_frame_index.shape
 
@@ -249,4 +252,53 @@ def _gaussian2d(shape=(3,3),sigma=0.5):
     if sumh != 0:
         h /= sumh
     return h
+
+
+def _inverse_motion(motion_vectors:np.array) -> np.array:
+    """ This function is used to fill missing motion vectors.
+
+    In some cases, the encoder does not compute a motion for a specific block.
+    It will, therefore, give us a (0, 0) motion vector even though the motion
+    is not zero.
+    Each block has a backward and forward motion vector. To fill the missing
+    motion vector (for example forward), we take the inverse backward motion
+    vector.
+
+    Args:
+        motion_vectors: The motion vector array.
+
+    Returns:
+        motion_vectors: The filled motion vector array.
+    """
+
+    result = motion_vectors.copy()
     
+    # Create masks for zero vectors
+    backward_zero = (result[..., 0] == 0) & (result[..., 1] == 0)
+    forward_zero = (result[..., 2] == 0) & (result[..., 3] == 0)
+    
+    # Update where backward is zero
+    result[backward_zero, 0] = -result[backward_zero, 2]
+    result[backward_zero, 1] = -result[backward_zero, 3]
+    
+    # Update where forward is zero
+    result[forward_zero, 2] = -result[forward_zero, 0]
+    result[forward_zero, 3] = -result[forward_zero, 1]
+
+    return result
+
+
+def _get_reference_frame_number(reference_frame: np.array, order_hint: list[int]) -> np.array:
+    """ This function is used to get the reference frame number out of AV1 bitstream.
+
+    Args:
+        reference_frame: The reference frame.
+        order_hint: The order hint.
+
+    Returns:
+        The reference frame number.
+    """
+
+    result = order_hint[int(reference_frame)]
+
+    return result
